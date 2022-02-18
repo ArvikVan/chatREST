@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author ArvikV
  * @version 1.0
  * @since 17.02.2022
+ * В рамках jwt добавлены иквлз и хэшкод
  */
 @Entity
 public class PersonEntity {
@@ -56,5 +58,23 @@ public class PersonEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        PersonEntity person = (PersonEntity) o;
+        return Objects.equals(username, person.username)
+                && Objects.equals(password, person.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password);
     }
 }

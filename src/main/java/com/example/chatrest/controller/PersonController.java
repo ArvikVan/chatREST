@@ -4,6 +4,7 @@ import com.example.chatrest.entity.PersonEntity;
 import com.example.chatrest.repository.PersonRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +16,27 @@ import java.util.stream.StreamSupport;
  * @version 1.0
  * @since 17.02.2022
  * Это контроллер - тут ЛОГИКИ быть не должно, сюда вызываются методы из СЕРВИСНОГО СЛОЯ
+ * добавим метод для регистрации sign-up
  */
 @RestController
 @RequestMapping("/persons")
 public class PersonController {
     private final PersonRepository personRepository;
+    private BCryptPasswordEncoder encoder;
 
-    public PersonController(PersonRepository personRepository) {
+    public PersonController(PersonRepository personRepository, BCryptPasswordEncoder encoder) {
         this.personRepository = personRepository;
+        this.encoder = encoder;
+    }
+
+    /**
+     * регим персону
+     * @param person персон
+     */
+    @PostMapping("/sign-up")
+    public void signUp(@RequestBody PersonEntity person) {
+        person.setPassword(encoder.encode(person.getPassword()));
+        personRepository.save(person);
     }
 
     @PostMapping("/")
