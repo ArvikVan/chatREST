@@ -69,10 +69,10 @@ public class PersonController {
      * @return получаем всех пользователей
      */
     @GetMapping("/")
-    public List<PersonEntity> findAll() {
-        return StreamSupport.stream(
+    public ResponseEntity<List<PersonEntity>> findAll() {
+        return new ResponseEntity<>(StreamSupport.stream(
                 this.personRepository.findAll().spliterator(), false
-        ).collect(Collectors.toList());
+        ).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

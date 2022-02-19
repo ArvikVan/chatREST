@@ -25,10 +25,10 @@ public class MessageController {
     }
 
     @GetMapping("/")
-    public List<Message> findAllMessages() {
-        return StreamSupport.stream(
+    public ResponseEntity<List<Message>> findAllMessages() {
+        return new ResponseEntity<>(StreamSupport.stream(
                 this.messages.findAll().spliterator(), false
-        ).collect(Collectors.toList());
+        ).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
