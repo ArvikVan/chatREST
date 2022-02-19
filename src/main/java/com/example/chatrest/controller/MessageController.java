@@ -1,7 +1,6 @@
 package com.example.chatrest.controller;
 
 import com.example.chatrest.entity.Message;
-import com.example.chatrest.entity.PersonEntity;
 import com.example.chatrest.repository.MessageRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

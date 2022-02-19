@@ -2,7 +2,9 @@ package com.example.chatrest.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ArvikV
@@ -17,12 +19,12 @@ public class Room {
     private String name;
     @ManyToMany
     @JoinTable(name = "person_room")
-    private List<PersonEntity> persons = new ArrayList<>();
+    private Set<PersonEntity> persons = new HashSet<>();
 
     public Room() {
     }
 
-    public static Room of(int id, String name, List<PersonEntity> person) {
+    public static Room of(int id, String name, Set<PersonEntity> person) {
         Room room = new Room();
         room.id = id;
         room.name = name;
@@ -34,11 +36,11 @@ public class Room {
         persons.add(author);
     }
 
-    public List<PersonEntity> getPersons() {
+    public Set<PersonEntity> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<PersonEntity> persons) {
+    public void setPersons(Set<PersonEntity> persons) {
         this.persons = persons;
     }
 
