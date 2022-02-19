@@ -40,6 +40,10 @@ public class RoleController {
 
     @PostMapping("/")
     public ResponseEntity<Role> createRole(@RequestBody Role role) {
+        var nameOfAuthority = role.getAuthority();
+        if (nameOfAuthority == null) {
+            throw new NullPointerException("Role must be with somename");
+        }
         return new ResponseEntity<>(
                 this.roleRepo.save(role),
                 HttpStatus.CREATED

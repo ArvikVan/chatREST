@@ -36,6 +36,10 @@ public class RoomController {
 
     @PostMapping("/")
     public ResponseEntity<Room> createRoom(@RequestBody Room room) {
+        var roomName = room.getName();
+        if (roomName == null) {
+            throw new NullPointerException("The Room must have a NOMBRE");
+        }
         return new ResponseEntity<>(
                 this.roomRepo.save(room),
                 HttpStatus.CREATED

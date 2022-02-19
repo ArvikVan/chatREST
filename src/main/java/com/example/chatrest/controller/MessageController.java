@@ -56,6 +56,10 @@ public class MessageController {
 
     @PostMapping("/")
     public ResponseEntity<Message> create(@RequestBody Message message) {
+        var messageText = message.getText();
+        if (messageText == null) {
+            throw new NullPointerException("The text in message must be not empty");
+        }
         return new ResponseEntity<Message>(
                 this.messages.save(message),
                 HttpStatus.CREATED
