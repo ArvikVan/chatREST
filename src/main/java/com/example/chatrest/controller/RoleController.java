@@ -1,13 +1,16 @@
 package com.example.chatrest.controller;
 
+import com.example.chatrest.entity.Message;
 import com.example.chatrest.entity.Role;
 import com.example.chatrest.repository.RoleRepo;
+import com.example.chatrest.service.Patch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -60,5 +63,14 @@ public class RoleController {
     public ResponseEntity<Void> deleteRole(@PathVariable int id) {
         restTemplate.delete(API_ID, id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public Role patch(@RequestBody Role role) throws InvocationTargetException,
+            IllegalAccessException {
+        Role current = roleRepo.findById(role.getId()).orElse(null);
+        Patch.patchAll(role, current);
+        roleRepo.save(role);
+        return current;
     }
 }

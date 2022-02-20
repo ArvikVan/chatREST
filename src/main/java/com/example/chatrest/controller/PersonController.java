@@ -1,8 +1,10 @@
 package com.example.chatrest.controller;
 
+import com.example.chatrest.entity.Message;
 import com.example.chatrest.entity.PersonEntity;
 import com.example.chatrest.exception.PersonExistExceprion;
 import com.example.chatrest.repository.PersonRepository;
+import com.example.chatrest.service.Patch;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -117,5 +120,14 @@ public class PersonController {
             }
         }));
         LOGGER.error(e.getLocalizedMessage());
+    }
+
+    @PatchMapping("/")
+    public PersonEntity patch(@RequestBody PersonEntity person) throws InvocationTargetException,
+            IllegalAccessException {
+        PersonEntity current = personRepository.findById(person.getId()).orElse(null);
+        Patch.patchAll(person, current);
+        personRepository.save(person);
+        return current;
     }
 }

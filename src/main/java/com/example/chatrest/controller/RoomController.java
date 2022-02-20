@@ -1,13 +1,16 @@
 package com.example.chatrest.controller;
 
+import com.example.chatrest.entity.Message;
 import com.example.chatrest.entity.Room;
 import com.example.chatrest.repository.RoomRepo;
+import com.example.chatrest.service.Patch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -56,5 +59,14 @@ public class RoomController {
     public ResponseEntity<Void> deleteRoom(@PathVariable int id) {
         restTemplate.delete(API_ID, id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public Room patch(@RequestBody Room room) throws InvocationTargetException,
+            IllegalAccessException {
+        Room current = roomRepo.findById(room.getId()).orElse(null);
+        Patch.patchAll(room, current);
+        roomRepo.save(room);
+        return current;
     }
 }

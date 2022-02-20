@@ -2,10 +2,12 @@ package com.example.chatrest.controller;
 
 import com.example.chatrest.entity.Message;
 import com.example.chatrest.repository.MessageRepo;
+import com.example.chatrest.service.Patch;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -64,5 +66,14 @@ public class MessageController {
                 this.messages.save(message),
                 HttpStatus.CREATED
         );
+    }
+
+    @PatchMapping("/")
+    public Message patch(@RequestBody Message message) throws InvocationTargetException,
+            IllegalAccessException {
+        Message current = messages.findById(message.getId()).orElse(null);
+        Patch.patchAll(message, current);
+        messages.save(message);
+        return current;
     }
 }
