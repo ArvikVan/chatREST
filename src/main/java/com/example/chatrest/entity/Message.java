@@ -3,6 +3,7 @@ package com.example.chatrest.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 /**
@@ -15,6 +16,7 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "This field must be not empty")
     private String text;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id")

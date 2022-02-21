@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import java.util.stream.StreamSupport;
  * @author ArvikV
  * @version 1.0
  * @since 17.02.2022
+ * Valid Она указывает, что предварительно перед тем как мы сможем работать с моделью данные будут
+ * проходить валидацию согласно аннотациям валидации, прописанным в модели.
  */
 @RestController
 @RequestMapping("/messages")
@@ -34,7 +37,7 @@ public class MessageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Message> findById(@PathVariable int id) {
+    public ResponseEntity<Message> findById(@Valid @PathVariable int id) {
         var message = this.messages.findById(id);
         return new ResponseEntity<Message>(
                 message.orElse(new Message()),
@@ -43,7 +46,7 @@ public class MessageController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Message message) {
+    public ResponseEntity<Void> update(@Valid @RequestBody Message message) {
         messages.save(message);
         return ResponseEntity.ok().build();
     }
@@ -57,7 +60,7 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> create(@RequestBody Message message) {
+    public ResponseEntity<Message> create(@Valid @RequestBody Message message) {
         var messageText = message.getText();
         if (messageText == null) {
             throw new NullPointerException("The text in message must be not empty");
@@ -69,7 +72,7 @@ public class MessageController {
     }
 
     @PatchMapping("/")
-    public Message patch(@RequestBody Message message) throws InvocationTargetException,
+    public Message patch(@Valid @RequestBody Message message) throws InvocationTargetException,
             IllegalAccessException {
         Message current = messages.findById(message.getId()).orElse(null);
         Patch.patchAll(message, current);

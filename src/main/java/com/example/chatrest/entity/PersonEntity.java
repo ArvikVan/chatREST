@@ -3,6 +3,7 @@ package com.example.chatrest.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,8 +19,10 @@ public class PersonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "username")
+    @NotBlank(message = "Username must be not empty")
     private String username;
     @Column(name = "password")
+    @NotBlank(message = "Password must be exist")
     private String password;
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)

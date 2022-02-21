@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -28,6 +29,8 @@ import java.util.stream.StreamSupport;
  * @since 17.02.2022
  * Это контроллер - тут ЛОГИКИ быть не должно, сюда вызываются методы из СЕРВИСНОГО СЛОЯ
  * добавим метод для регистрации sign-up
+ * Valid Она указывает, что предварительно перед тем как мы сможем работать с моделью данные будут
+ * проходить валидацию согласно аннотациям валидации, прописанным в модели.
  */
 @RestController
 @RequestMapping("/persons")
@@ -61,7 +64,7 @@ public class PersonController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<PersonEntity> create(@RequestBody PersonEntity person) {
+    public ResponseEntity<PersonEntity> create(@Valid @RequestBody PersonEntity person) {
         return new ResponseEntity<PersonEntity>(
                 this.personRepository.save(person),
                 HttpStatus.CREATED
@@ -88,7 +91,7 @@ public class PersonController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody PersonEntity person) {
+    public ResponseEntity<Void> update(@Valid @RequestBody PersonEntity person) {
         this.personRepository.save(person);
         return ResponseEntity.ok().build();
     }
@@ -123,7 +126,7 @@ public class PersonController {
     }
 
     @PatchMapping("/")
-    public PersonEntity patch(@RequestBody PersonEntity person) throws InvocationTargetException,
+    public PersonEntity patch(@Valid @RequestBody PersonEntity person) throws InvocationTargetException,
             IllegalAccessException {
         PersonEntity current = personRepository.findById(person.getId()).orElse(null);
         Patch.patchAll(person, current);

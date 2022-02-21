@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,8 @@ import java.util.stream.StreamSupport;
  * @author ArvikV
  * @version 1.0
  * @since 18.02.2022
+ * Valid Она указывает, что предварительно перед тем как мы сможем работать с моделью данные будут
+ * проходить валидацию согласно аннотациям валидации, прописанным в модели.
  */
 @RestController
 @RequestMapping("/rooms")
@@ -38,7 +41,7 @@ public class RoomController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Room> createRoom(@RequestBody Room room) {
+    public ResponseEntity<Room> createRoom(@Valid @RequestBody Room room) {
         var roomName = room.getName();
         if (roomName == null) {
             throw new NullPointerException("The Room must have a NOMBRE");
@@ -50,7 +53,7 @@ public class RoomController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> updateRoom(@RequestBody Room room) {
+    public ResponseEntity<Void> updateRoom(@Valid @RequestBody Room room) {
         restTemplate.put(API, room);
         return ResponseEntity.ok().build();
     }
@@ -62,7 +65,7 @@ public class RoomController {
     }
 
     @PatchMapping("/")
-    public Room patch(@RequestBody Room room) throws InvocationTargetException,
+    public Room patch(@Valid @RequestBody Room room) throws InvocationTargetException,
             IllegalAccessException {
         Room current = roomRepo.findById(room.getId()).orElse(null);
         Patch.patchAll(room, current);

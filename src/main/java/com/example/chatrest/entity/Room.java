@@ -1,6 +1,7 @@
 package com.example.chatrest.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "RoomName must be not null value")
     private String name;
     @ManyToMany
     @JoinTable(name = "person_room")
