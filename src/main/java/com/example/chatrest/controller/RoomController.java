@@ -26,8 +26,8 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
-    private static final String API = "http://localhost:8081/rooms/";
-    private static final String API_ID = "http://localhost:8081/rooms/{id}";
+    private static final String API = "http://localhost:8082/rooms/";
+    private static final String API_ID = "http://localhost:8082/rooms/{id}";
     @Autowired
     private RestTemplate restTemplate;
     @Autowired

@@ -23,8 +23,8 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping("/roles")
 public class RoleController {
-    private static final String API = "http://localhost:8081/roles/";
-    private static final String API_ID = "http://localhost:8081/roles/{id}";
+    private static final String API = "http://localhost:8082/roles/";
+    private static final String API_ID = "http://localhost:8082/roles/{id}";
     private final RoleRepo roleRepo;
 
     @Autowired
